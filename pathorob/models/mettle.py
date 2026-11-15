@@ -8,16 +8,22 @@ class Mettle15ModelWrapper(ModelWrapper):
     """
     METTLE 1.5 (Slideflow Labs): https://huggingface.co/slideflow-labs/mettle-1.5
 
-    Public, ungated weights; no Hugging Face token is needed.
+    License: CC-BY-NC-ND-4.0. Access is gated with automatic approval: accept the terms on the
+    model page, then pass a Hugging Face token via `--model_args '{"hf_token": "<TOKEN>"}'`
+    (or log in beforehand with `huggingface-cli login`).
     Requires: timm>=1.0.15, transformers>=4.48, safetensors>=0.4.
     """
 
-    def __init__(self, feature_view="cls"):
+    def __init__(self, feature_view="cls", hf_token=None):
         """
+        :param hf_token: Optional Hugging Face token with access to the gated model repository.
         :param feature_view: "cls" for the 1536-dim refined CLS embedding (model default), or
             "cls_mean" for the 3072-dim refined CLS + mean spatial patch token embedding.
         """
         from transformers import AutoModel
+        if hf_token is not None:
+            from huggingface_hub import login
+            login(token=hf_token, add_to_git_credential=False)
         if feature_view not in ("cls", "cls_mean"):
             raise ValueError(f"feature_view must be 'cls' or 'cls_mean', got '{feature_view}'.")
         self.feature_view = feature_view
