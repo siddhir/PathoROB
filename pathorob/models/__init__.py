@@ -1,5 +1,6 @@
 from pathorob.models.uni import UNI2hModelWrapper
 from pathorob.models.phikon import Phikonv2ModelWrapper
+from pathorob.models.mettle import Mettle15ModelWrapper
 
 
 def load_model(model_name: str, model_args: dict):
@@ -14,6 +15,12 @@ def load_model(model_name: str, model_args: dict):
         model_class = UNI2hModelWrapper
     elif model_name == "phikonv2_clsmean":
         model_class = Phikonv2ModelWrapper
+    elif model_name == "mettle15_cls":
+        model_class = Mettle15ModelWrapper
+        model_args = {"feature_view": "cls", **model_args}
+    elif model_name == "mettle15_clsmean":
+        model_class = Mettle15ModelWrapper
+        model_args = {"feature_view": "cls_mean", **model_args}
     ### Add your custom models here ###
     # elif model_name ==  "<my_model_name>":
     #   model_class = MyModelWrapper
